@@ -1,14 +1,12 @@
-/*********************************************************************************
- * 
- * Ce fichier contient toutes les fonctions nécessaires au fonctionnement du jeu. 
- * 
- *********************************************************************************/
+let i = 0
+let score = 0
+let nbMotsProposes = listeMots.length
 
-/**
- * Cette fonction affiche dans la console le score de l'utilisateur
- * @param {number} score : le score de l'utilisateur
- * @param {number} nbMotsProposes : le nombre de mots proposés à l'utilisateur
- */
+let listeProposition = listeMots
+
+
+
+
 function afficherResultat(score, nbMotsProposes) {
     let affichage = document.querySelector(".zoneScore span")
     
@@ -17,47 +15,65 @@ function afficherResultat(score, nbMotsProposes) {
     affichage.innerText = displayScore
 }
 
-/**
- * Cette fonction demande à l'utilisateur de choisir entre "mots" et "phrases" et retourne le choix de l'utilisateur
- * @return {string} : le choix de l'utilisateur, ce choix est nécessairement "mots" ou "phrases
- */
+        function afficherProposition(proposition) {
+            let prop = document.querySelector(".zoneProposition")
+            prop.innerText = proposition
+        }  
 
-
-/**
- * Cette fonction lance la boucle de jeu, c'est à dire qu'elle demande à l'utilisateur de saisir tous les mots
- * contenus dans le tableau listePropositions. A chaque mot saisi, on incrémente le score de l'utilisateur
- * 
- * @param {array[string]} listePropositions 
- * @return {number} : le score de l'utilisateur
- */
-/**function lancerBoucleDeJeu(listePropositions) {
-    let score = 0
-    for (let i = 0; i < listePropositions.length; i++) {
-        // On demande à l'utilisateur de saisir le mot correspondant à l'indice i
-        let motUtilisateur = prompt("Entrez le mot : " + listePropositions[i])
-        if (motUtilisateur === listePropositions[i]) {
-            // Si le mot saisi par l'utilisateur est correct, on incrémente le score
-            score++
+let baliseOptionSource = document.querySelectorAll(".optionSource input")
+for (let s = 0; s < baliseOptionSource.length; s++) {
+    baliseOptionSource[s].addEventListener("change", (event) => {
+        console.log(event.target.value)
+        if(event.target.value === "1") {
+            listeProposition = listeMots
+        } else {
+            listeProposition = listePhrases
         }
-    }
-    return score
+        afficherProposition(listeProposition[i])
+    })
 }
-*/
-/**
- * Cette fonction lance le jeu. 
- * Elle demande à l'utilisateur de choisir entre "mots" et "phrases" et lance la boucle de jeu correspondante
- */
+
+
 function lancerJeu() {
     let click = document.getElementById("btnValiderMot")
     let inputEcriture = document.getElementById("inputEcriture")
+    afficherProposition(listeProposition[i])
     click.addEventListener('click', ()=> {
-        console.log(inputEcriture.value)
-        let i = 0
-        
+        if(inputEcriture.value === listeProposition[i]) {
+            score++
+            afficherResultat(score, nbMotsProposes)
+        } else {
+            afficherResultat(score, nbMotsProposes)
+        }
+        i++
+        inputEcriture.value = ""
+        if(listeProposition[i] === undefined){
+            afficherProposition("Le jeu est fini")
+            click.disabled = true
+        } else {
+            afficherProposition(listeProposition[i])
+        }
     })
     
     afficherResultat(score, nbMotsProposes)
 }
 
 
+let form = document.querySelector(".popup form")
+    form.addEventListener("submit", (event) => {
+        event.preventDefault()
+        console.log("Arret de l'envoi")
 
+        let nom = document.getElementById("nom")
+        let email = document.getElementById("email")
+
+
+    })
+
+
+function afficherEmail(nom, email, score) {
+    let mailto = `mailto:${email}?subject=Partage du score Azertype&body=Salut, je suis ${nom} et je viens de réaliser le score ${score} sur le site d'Azertype !`
+    location.href = mailto
+}
+
+/* Pour pouvoir enlever les espaces vides d'un input on peut utiliser trim() */ 
